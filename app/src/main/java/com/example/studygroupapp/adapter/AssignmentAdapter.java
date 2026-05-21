@@ -17,9 +17,17 @@ import java.util.Locale;
 public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.ViewHolder> {
 
     private List<Assignment> assignmentList;
+    private OnItemClickListener listener; // Thêm bộ lắng nghe sự kiện
 
-    public AssignmentAdapter(List<Assignment> assignmentList) {
+    // Tạo Interface (khung chuẩn) để truyền sự kiện bấm ra ngoài Fragment
+    public interface OnItemClickListener {
+        void onItemClick(Assignment assignment);
+    }
+
+    // Nâng cấp Hàm tạo (Constructor) yêu cầu phải có Listener
+    public AssignmentAdapter(List<Assignment> assignmentList, OnItemClickListener listener) {
         this.assignmentList = assignmentList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,6 +49,13 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.Vi
         } else {
             holder.tvAssignmentDeadline.setText("Không có hạn chót");
         }
+
+        // BẮT SỰ KIỆN: Khi người dùng bấm vào toàn bộ Thẻ (ItemView)
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(assignment);
+            }
+        });
     }
 
     @Override
