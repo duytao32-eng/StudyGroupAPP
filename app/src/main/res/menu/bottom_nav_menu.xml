@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_attendance"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Điểm danh" />
+    <item
+        android:id="@+id/nav_feed"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="Bảng tin" />
+    <item
+        android:id="@+id/nav_assignment"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Bài tập" />
+    <item
+        android:id="@+id/nav_chat"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="Thảo luận" />
+</menu>
