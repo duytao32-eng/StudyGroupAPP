@@ -24,10 +24,10 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         // 2. Tìm các ô nhập liệu và nút bấm trên giao diện
-        edtRegName = findViewById(R.id.edtRegName);
-        edtRegEmail = findViewById(R.id.edtRegEmail);
-        edtRegPassword = findViewById(R.id.edtRegPassword);
-        btnRegister = findViewById(R.id.btnRegister);
+        edtRegName = findViewById(R.id.edtRegisterFullName);
+        edtRegEmail = findViewById(R.id.edtRegisterEmail);
+        edtRegPassword = findViewById(R.id.edtRegisterPassword);
+        btnRegister = findViewById(R.id.btnRegisterSubmit);
         TextView tvGoToLogin = findViewById(R.id.tvGoToLogin);
 
         // Nút chữ "Quay về đăng nhập"

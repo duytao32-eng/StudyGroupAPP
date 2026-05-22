@@ -25,10 +25,10 @@ public class LoginActivity extends AppCompatActivity {
         // Khởi tạo Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        edtLoginEmail = findViewById(R.id.edtLoginEmail);
-        edtLoginPassword = findViewById(R.id.edtLoginPassword);
+        edtLoginEmail = findViewById(R.id.edtEmail);
+        edtLoginPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        TextView tvGoToRegister = findViewById(R.id.tvGoToRegister);
+        TextView tvGoToRegister = findViewById(R.id.tvRegister);
 
         // Chuyển sang màn hình Đăng ký
         tvGoToRegister.setOnClickListener(v -> {
