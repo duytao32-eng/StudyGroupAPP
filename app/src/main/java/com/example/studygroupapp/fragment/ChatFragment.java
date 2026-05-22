@@ -40,6 +40,8 @@ public class ChatFragment extends Fragment {
         this.groupId = groupId;
     }
 
+    // NƠI XỬ LÝ THỜI GIAN THỰC CỦA PHẦN CHAT
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class ChatFragment extends Fragment {
         return view;
     }
 
-    // GỬI TIN NHẮN
+    // GỬI TIN NHẮN REALTIME ĐẨY LÊN FIREBASE
     private void sendMessage() {
         String text = edtMessageInput.getText().toString().trim();
         if (text.isEmpty()) return;

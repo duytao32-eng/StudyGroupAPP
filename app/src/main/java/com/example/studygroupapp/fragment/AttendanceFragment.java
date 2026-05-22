@@ -36,6 +36,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import java.util.Collections; // <-- Bổ sung dòng import này
+import java.util.Comparator;  // <-- Bổ sung dòng import này
+
 public class AttendanceFragment extends Fragment {
 
     private String groupId, groupName, creatorId;
@@ -114,21 +117,50 @@ public class AttendanceFragment extends Fragment {
     // ==========================================
     // 1. TẢI LỊCH SỬ ĐI HỌC CỦA BẢN THÂN
     // ==========================================
+// ==========================================
+    // 1. TẢI LỊCH SỬ ĐI HỌC CỦA BẢN THÂN (Đã Fix lỗi ngầm Firebase)
+    // ==========================================
+    // ==========================================
+    // 1. TẢI LỊCH SỬ ĐI HỌC CỦA BẢN THÂN (Bản bulletproof fix lỗi Java docs.sort)
+    // ==========================================
     private void loadMyAttendanceHistory() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         FirebaseFirestore.getInstance().collection("Attendance")
                 .whereEqualTo("groupId", groupId)
                 .whereEqualTo("userId", uid)
-                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     historyList.clear();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        Date date = doc.getTimestamp("timestamp").toDate();
-                        String time = new SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault()).format(date);
-                        historyList.add("Có mặt lúc: " + time);
+
+                    // 1. Hứng toàn bộ tài liệu trả về (Đổi từ var docs sang listDocs cho chắc)
+                    List<com.google.firebase.firestore.DocumentSnapshot> listDocs = queryDocumentSnapshots.getDocuments();
+
+                    // 2. Sắp xếp (Sort) bằng code Java: Sử dụng Collections.sort để tránh lỗi
+                    Collections.sort(listDocs, new Comparator<com.google.firebase.firestore.DocumentSnapshot>() {
+                        @Override
+                        public int compare(com.google.firebase.firestore.DocumentSnapshot d1, com.google.firebase.firestore.DocumentSnapshot d2) {
+                            Date date1 = d1.getTimestamp("timestamp") != null ? d1.getTimestamp("timestamp").toDate() : new Date(0);
+                            Date date2 = d2.getTimestamp("timestamp") != null ? d2.getTimestamp("timestamp").toDate() : new Date(0);
+                            // Sắp xếp giảm dần: giờ mới nhất lên đầu
+                            return date2.compareTo(date1);
+                        }
+                    });
+
+                    // 3. Đổ dữ liệu đã sắp xếp vào danh sách hiển thị (String list)
+                    for (com.google.firebase.firestore.DocumentSnapshot doc : listDocs) {
+                        if (doc.getTimestamp("timestamp") != null) {
+                            Date date = doc.getTimestamp("timestamp").toDate();
+                            String time = new SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault()).format(date);
+                            historyList.add("Có mặt lúc: " + time);
+                        }
                     }
+
+                    // 4. Báo cho Adapter vẽ lên màn hình
                     historyAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Lỗi tải lịch sử: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
